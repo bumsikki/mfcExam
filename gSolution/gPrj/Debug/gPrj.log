@@ -1,4 +1,3 @@
-﻿  DlgImage.cpp
-gPrjDlg.obj : warning LNK4229: 잘못된 지시문 '/entity:WinMainCRTStartup'이(가) 발견되었습니다. 무시됩니다.
+﻿gPrjDlg.obj : warning LNK4229: 잘못된 지시문 '/entity:WinMainCRTStartup'이(가) 발견되었습니다. 무시됩니다.
   gPrj.vcxproj -> C:\Users\user\Documents\GitHub\mfcExam\gSolution\Debug\gPrj.exe
   gPrj.vcxproj -> C:\Users\user\Documents\GitHub\mfcExam\gSolution\Debug\gPrj.pdb (Partial PDB)
