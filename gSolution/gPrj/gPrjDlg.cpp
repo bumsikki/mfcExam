@@ -184,7 +184,8 @@ HCURSOR CgPrjDlg::OnQueryDragIcon()
 void CgPrjDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
-	delete m_pDlgImage;
+	if(m_pDlgImage) delete m_pDlgImage;
+	if(m_pDlgImgResult) delete m_pDlgImgResult;
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
 
@@ -202,23 +203,27 @@ void CgPrjDlg::OnBnClickedBtnTest()
 	int nWidth = m_pDlgImage->m_Image.GetWidth();
 	int nHeight = m_pDlgImage->m_Image.GetHeight();
 	int nPitch = m_pDlgImage->m_Image.GetPitch();
+	memset(fm, 0xff, nWidth*nHeight);
 
-	for (int k = 0; k < 100; k++) {
+	for (int k = 0; k < 50; k++) {
 		int x = rand() % nWidth;
 		int y = rand() % nHeight;
 		fm[y*nPitch + x] = 0;
 	}
-	int nSum = 0;
+	int nIndex = 0;
 	for (int j = 0; j < nHeight; j++) {
 		for (int i = 0; i < nWidth; i++) {
 			if (fm[j*nPitch + i] == 0) {
-				cout << nSum++ << ":" << i << "." << j << endl;
-				
+				//cout << nSum++ << ":" << i << "." << j << endl;
+				if (m_pDlgImgResult->m_nDataCount < 100) {
+					m_pDlgImgResult[nIndex].m_ptData[nIndex].x = i;
+					m_pDlgImgResult[nIndex].m_ptData[nIndex].y = j;
+					m_pDlgImgResult->m_nDataCount = ++nIndex;
+				}
 			}		
 		}
 	}
-	cout << nSum << endl;
 
-	//memset(fm, 0, 320 * 240);
 	m_pDlgImage->Invalidate();
+	m_pDlgImgResult->Invalidate();
 }
