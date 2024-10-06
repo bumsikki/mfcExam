@@ -70,8 +70,9 @@ BEGIN_MESSAGE_MAP(CgPrjDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BTN_DLG, &CgPrjDlg::OnBnClickedBtnDlg)
+	//ON_BN_CLICKED(IDC_BTN_DLG, &CgPrjDlg::OnBnClickedBtnDlg)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BTN_TEST, &CgPrjDlg::OnBnClickedBtnTest)
 END_MESSAGE_MAP()
 
 
@@ -105,11 +106,17 @@ BOOL CgPrjDlg::OnInitDialog()
 	//  프레임워크가 이 작업을 자동으로 수행합니다.
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
-
+	MoveWindow(0, 0, 1280, 800);
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	m_pDlgImage = new CDlgImage;
 	m_pDlgImage->Create(IDD_DLGIMAGE, this);
-	
+	m_pDlgImage->ShowWindow(SW_SHOW);
+	m_pDlgImage->MoveWindow(0, 0, 640, 480);
+
+	m_pDlgImgResult = new CDlgImage;
+	m_pDlgImgResult->Create(IDD_DLGIMAGE, this);
+	m_pDlgImgResult->ShowWindow(SW_SHOW);
+	m_pDlgImgResult->MoveWindow(640, 0 , 640, 480);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -165,14 +172,14 @@ HCURSOR CgPrjDlg::OnQueryDragIcon()
 
 
 
-void CgPrjDlg::OnBnClickedBtnDlg()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	/*CDlgImage dlg;
-	dlg.DoModal();*/
-	m_pDlgImage->ShowWindow(SW_SHOW);
-	
-}
+//void CgPrjDlg::OnBnClickedBtnDlg()
+//{
+//	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+//	/*CDlgImage dlg;
+//	dlg.DoModal();*/
+//	m_pDlgImage->ShowWindow(SW_SHOW);
+//	
+//}
 
 void CgPrjDlg::OnDestroy()
 {
@@ -183,4 +190,35 @@ void CgPrjDlg::OnDestroy()
 
 void CgPrjDlg::callFunc(int n) {
 	int nData = n;
+	cout << nData << endl;
+
+}
+
+
+void CgPrjDlg::OnBnClickedBtnTest()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	unsigned char* fm = (unsigned char*)m_pDlgImage->m_Image.GetBits();
+	int nWidth = m_pDlgImage->m_Image.GetWidth();
+	int nHeight = m_pDlgImage->m_Image.GetHeight();
+	int nPitch = m_pDlgImage->m_Image.GetPitch();
+
+	for (int k = 0; k < 100; k++) {
+		int x = rand() % nWidth;
+		int y = rand() % nHeight;
+		fm[y*nPitch + x] = 0;
+	}
+	int nSum = 0;
+	for (int j = 0; j < nHeight; j++) {
+		for (int i = 0; i < nWidth; i++) {
+			if (fm[j*nPitch + i] == 0) {
+				cout << nSum++ << ":" << i << "." << j << endl;
+				
+			}		
+		}
+	}
+	cout << nSum << endl;
+
+	//memset(fm, 0, 320 * 240);
+	m_pDlgImage->Invalidate();
 }
